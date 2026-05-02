@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FlowGuard AI{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gradient mb-2">Workflow Recovery Operations Console</h1>
+            <p class="text-gray-400">Real-time workflow leak detection, recovery actions, and audit trail</p>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button class="btn btn-secondary">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Export Report
+            </button>
+            <button class="btn btn-primary">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                New Rule
+            </button>
+        </div>
+    </div>
+
+    <!-- Metrics Section -->
+    <div hx-get="/api/metrics" hx-trigger="load, every 10s" hx-swap="innerHTML" data-auto-refresh>
+        <!-- Metrics will be loaded here -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="metric-card skeleton" style="height: 120px;"></div>
+            <div class="metric-card skeleton" style="height: 120px;"></div>
+            <div class="metric-card skeleton" style="height: 120px;"></div>
+            <div class="metric-card skeleton" style="height: 120px;"></div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Column - Incidents & Task Queue -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Active Incidents -->
+            <div class="glass-panel">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-white">Active Workflow Leaks</h2>
+                    <span class="badge badge-danger">3 Critical</span>
+                </div>
+                <div hx-get="/api/incidents" hx-trigger="load, every 15s" hx-swap="innerHTML" data-auto-refresh>
+                    <!-- Incidents will be loaded here -->
+                    <div class="space-y-3">
+                        <div class="skeleton" style="height: 80px;"></div>
+                        <div class="skeleton" style="height: 80px;"></div>
+                        <div class="skeleton" style="height: 80px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Queue -->
+            <div class="glass-panel">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-white">Autonomous Task Queue</h2>
+                    <span class="badge badge-info">5 Pending</span>
+                </div>
+                <div hx-get="/api/task-queue" hx-trigger="load, every 10s" hx-swap="innerHTML" data-auto-refresh>
+                    <!-- Tasks will be loaded here -->
+                    <div class="space-y-3">
+                        <div class="skeleton" style="height: 60px;"></div>
+                        <div class="skeleton" style="height: 60px;"></div>
+                        <div class="skeleton" style="height: 60px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Activity Feed -->
+        <div class="space-y-6">
+            <div class="glass-panel">
+                <h2 class="text-xl font-bold text-white mb-6">Live Activity Feed</h2>
+                <div hx-get="/api/activity-feed" hx-trigger="load, every 5s" hx-swap="innerHTML" data-auto-refresh>
+                    <!-- Activity feed will be loaded here -->
+                    <div class="space-y-3">
+                        <div class="skeleton" style="height: 60px;"></div>
+                        <div class="skeleton" style="height: 60px;"></div>
+                        <div class="skeleton" style="height: 60px;"></div>
+                        <div class="skeleton" style="height: 60px;"></div>
+                        <div class="skeleton" style="height: 60px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

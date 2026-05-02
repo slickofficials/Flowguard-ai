@@ -1,0 +1,112 @@
+<!-- Task Queue Component - Displays autonomous tasks -->
+<div class="space-y-3">
+    {% if tasks %}
+        {% for task in tasks %}
+        <div class="glass-card p-4 hover:border-accent-blue/30 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3 flex-1">
+                    <!-- Task Status Icon -->
+                    <div class="flex-shrink-0">
+                        {% if task.status == 'running' %}
+                        <div class="w-8 h-8 rounded-lg bg-accent-blue/20 flex items-center justify-center border border-accent-blue/30">
+                            <svg class="w-4 h-4 text-accent-blue animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </div>
+                        {% elif task.status == 'completed' %}
+                        <div class="w-8 h-8 rounded-lg bg-accent-green/20 flex items-center justify-center border border-accent-green/30">
+                            <svg class="w-4 h-4 text-accent-green" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        {% elif task.status == 'failed' %}
+                        <div class="w-8 h-8 rounded-lg bg-accent-red/20 flex items-center justify-center border border-accent-red/30">
+                            <svg class="w-4 h-4 text-accent-red" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        {% else %}
+                        <div class="w-8 h-8 rounded-lg bg-gray-700/50 flex items-center justify-center border border-gray-600/30">
+                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Task Details -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <h4 class="text-sm font-medium text-white truncate">{{ task.name }}</h4>
+                            <span class="badge badge-{{ 'info' if task.status == 'pending' else 'purple' if task.status == 'running' else 'success' if task.status == 'completed' else 'danger' }}">
+                                {{ task.status | upper }}
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-400">{{ task.description }}</p>
+                    </div>
+                </div>
+                
+                <!-- Task Actions -->
+                <div class="flex items-center space-x-2 ml-3">
+                    {% if task.status == 'running' %}
+                    <button class="text-xs text-accent-red hover:text-accent-red/80 transition-colors" onclick="FlowGuardAI.toast.show('Task cancelled', 'warning')">
+                        Cancel
+                    </button>
+                    {% elif task.status == 'failed' %}
+                    <button class="text-xs text-accent-blue hover:text-accent-blue/80 transition-colors" onclick="FlowGuardAI.toast.show('Retrying task...', 'info')">
+                        Retry
+                    </button>
+                    {% endif %}
+                    <button class="text-xs text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Progress Bar (for running tasks) -->
+            {% if task.status == 'running' and task.progress %}
+            <div class="mt-3">
+                <div class="flex items-center justify-between text-xs text-gray-400 mb-1">
+                    <span>Progress</span>
+                    <span>{{ task.progress }}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ task.progress }}%"></div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Task Metadata -->
+            <div class="flex items-center space-x-4 mt-3 pt-3 border-t border-gray-700/50 text-xs text-gray-500">
+                <span class="flex items-center">
+                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                    </svg>
+                    {{ task.created_at }}
+                </span>
+                {% if task.rule_id %}
+                <span class="flex items-center">
+                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                    </svg>
+                    Rule: {{ task.rule_id }}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <!-- Empty State -->
+        <div class="glass-card p-8 text-center">
+            <div class="w-16 h-16 rounded-full bg-accent-blue/20 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">No Pending Tasks</h3>
+            <p class="text-sm text-gray-400">Task queue is empty</p>
+        </div>
+    {% endif %}
+</div>

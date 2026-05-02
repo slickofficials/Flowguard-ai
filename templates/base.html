@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FlowGuard AI - Autonomous Workflow Recovery{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-bg': '#0a0e17',
+                        'dark-surface': '#0f172a',
+                        'dark-border': '#1e293b',
+                        'accent-blue': '#3b82f6',
+                        'accent-purple': '#8b5cf6',
+                        'accent-green': '#10b981',
+                        'accent-red': '#ef4444',
+                        'accent-yellow': '#f59e0b',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-dark-bg via-slate-900 to-dark-bg min-h-screen text-gray-100 font-sans antialiased">
+    
+    <!-- Navigation Bar -->
+    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-dark-border/50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center shadow-lg shadow-accent-blue/20">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                            FlowGuard AI
+                        </h1>
+                        <p class="text-xs text-gray-400">Autonomous Workflow Recovery</p>
+                    </div>
+                </div>
+                
+                <!-- Center - System Status -->
+                <div class="flex items-center space-x-2 glass-card px-4 py-2 rounded-lg">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-green opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-accent-green"></span>
+                    </span>
+                    <span class="text-sm font-medium text-gray-200">System Healthy</span>
+                </div>
+                
+                <!-- Right - Live Clock -->
+                <div class="flex items-center space-x-4">
+                    <div class="glass-card px-4 py-2 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span id="live-clock" class="text-sm font-mono text-gray-200">--:--:--</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Autonomous Mode Toggle -->
+                    <button id="autonomous-toggle" class="glass-card px-4 py-2 rounded-lg hover:bg-white/10 transition-all duration-200 group">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 rounded-full bg-accent-green animate-pulse"></div>
+                            <span class="text-sm font-medium text-gray-200 group-hover:text-white">Autonomous</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-24 pb-8 px-6">
+        <div class="max-w-7xl mx-auto">
+            {% block content %}
+            <!-- Page content goes here -->
+            {% endblock %}
+        </div>
+    </main>
+    
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3">
+        <!-- Toasts will be dynamically inserted here -->
+    </div>
+    
+    <!-- Custom JavaScript -->
+    <script src="/static/js/app.js"></script>
+    
+    {% block scripts %}
+    <!-- Additional page-specific scripts -->
+    {% endblock %}
+</body>
+</html>
